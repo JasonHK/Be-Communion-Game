@@ -70,7 +70,7 @@ class TitleScene extends Phaser.Scene {
     }
 
     update() {
-        if ((this.keys.isDown) || (this.pointer.isDown)) { console.log(this.pointer);
+        if ((this.keys.isDown) || (this.pointer.isDown) || (this.input.activePointer.isDown)) { console.log(this.pointer);
             this.scene.start("sc-game");
         }
     }
