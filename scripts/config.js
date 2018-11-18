@@ -4,7 +4,7 @@ const GameConfig = Object.freeze({
     name: "Be communion!",
     author: "Jason Kwok",
     year: "2018",
-    version: "0.1",
+    version: "1.0",
     config: {
         interval: 2250,
         leafs: 4,
