@@ -4,28 +4,28 @@ const GameConfig = Object.freeze({
     name: "Be communion!",
     author: "Jason Kwok",
     year: "2018",
-    version: "1.0",
+    version: "1.1",
     config: {
-        interval: 2250,
+        interval: 1750,
         leafs: 4,
         scores: {
             minimum: 0,
-            wining: 5,
+            wining: 10,
         },
         speed: {
-            player: 275,
-            drop: 200
+            player: 350,
+            drop: 250
         },
         timelimit: 0,
         vocabulary: {
             positive: {
                 score: 1,
-                possibility: 1,
+                probability: 6,
                 list: ["尊重", "互助", "包容", "融洽", "傾聽", "了解", "同理心", "忍耐", "關心", "禮讓", "共融", "友愛"]
             },
             negative: {
-                score: 0,
-                possibility: 1,
+                score: -1,
+                probability: 4,
                 list: ["歧視", "偏見", "欺凌", "恥笑", "侮辱", "排斥"]
             }
         }
@@ -40,5 +40,13 @@ const PhaserConfig = {
     width: 900,
     height: 600,
     pixelArt: true,
-    scene: [TitleScene, GameScene]
+    scene: [TitleScene, GameScene],
+    plugins: {
+        global: [{
+            key: 'GameScalePlugin',
+            plugin: Phaser.Plugins.GameScalePlugin,
+            mapping: 'gameScale',
+            data: {  }
+        }]
+    }
 };

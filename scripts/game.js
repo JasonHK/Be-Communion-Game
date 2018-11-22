@@ -154,7 +154,7 @@ class GameScene extends Phaser.Scene {
         if (doDrop) {
             doDrop = false;
 
-            let isPositive = (Utilities.random(0, 2) == 1);
+            let isPositive = this.getTones(GameConfig.config.vocabulary.positive.probability, GameConfig.config.vocabulary.negative.probability);
             this.__proto__.drop(this.leafs.children.entries, this.labels, isPositive);
         }
     }
@@ -166,6 +166,11 @@ class GameScene extends Phaser.Scene {
         type = type.toLowerCase();
         if ((type == "horizontal") || (type == "both")) { target.x = baseX - target.width / 2; } 
         if ((type == "vertical") || (type == "both")) { target.y = baseY - target.height / 2; }
+    }
+
+    getTones(positive, negative) {
+        let random = Utilities.random(1, (positive + negative) + 1);
+        if (random <= positive) { return true; } else { return false; }
     }
 
     getWords(isPositive) {
@@ -195,15 +200,24 @@ class GameScene extends Phaser.Scene {
         }
     }
 
+    //-------------------------------------------------------------------------
+    // Leafs Collection
+    //-------------------------------------------------------------------------
     collect(player, leaf) {
         leaf.body.allowGravity = false;
         leaf.setVelocityY(0);
         leaf.y = -50;
 
-        if (leaf.isPositive) { this.score += GameConfig.config.vocabulary.positive.score; }
-            else { this.score += GameConfig.config.vocabulary.negative.score; }
-        if (this.score < 10) { this.scoreCounter.setText("0" + this.score) }
-            else { this.scoreCounter.setText(this.score) }
+        if (leaf.isPositive) { 
+            this.score += GameConfig.config.vocabulary.positive.score; 
+        } else { 
+            this.score += ((this.score > GameConfig.config.scores.minimum) ? GameConfig.config.vocabulary.negative.score : 0); 
+        }
+        if (this.score < 10) { 
+            this.scoreCounter.setText("0" + this.score);
+        } else { 
+            this.scoreCounter.setText(this.score);
+        }
 
         if (this.score >= GameConfig.config.scores.wining) {
             clearInterval(this.dropLeafs);
