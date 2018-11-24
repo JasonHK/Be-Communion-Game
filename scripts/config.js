@@ -7,7 +7,7 @@ const GameConfig = Object.freeze({
     version: "1.1",
     config: {
         interval: 1750,
-        leafs: 4,
+        leaves: 4,
         scores: {
             minimum: 0,
             wining: 10,

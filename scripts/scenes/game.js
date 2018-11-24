@@ -14,6 +14,7 @@ class GameScene extends Phaser.Scene {
             }
         });
 
+        this.controllable = true;
         this.startCountdown = 4;
         this.labels = [];
         this.score = 0;
@@ -46,12 +47,12 @@ class GameScene extends Phaser.Scene {
         //this.__proto__.center(this.player, undefined, "horizontal"); console.log(this.player);
 
         let leafIndex = 0;
-        this.leafs = this.physics.add.group({
+        this.leaves = this.physics.add.group({
             key: 'ob-leaf',
-            repeat: (GameConfig.config.leafs - 1),
+            repeat: (GameConfig.config.leaves - 1),
             setXY: { x: 110, y: -50, stepX: 225 }
         });
-        this.leafs.children.iterate((leaf) => {
+        this.leaves.children.iterate((leaf) => {
             leaf.setScale(0.8);
             leaf.body.allowGravity = false;
 
@@ -71,7 +72,7 @@ class GameScene extends Phaser.Scene {
                 families: ["unifont"]
             },
             active: () => {
-                for (let i = 0; i < GameConfig.config.leafs; i++) {
+                for (let i = 0; i < GameConfig.config.leaves; i++) {
                     this.labels.push(this.add.text(-100, -100, "", {
                         fontSize: "35px",
                         fontFamily: "Unifont",
@@ -104,31 +105,31 @@ class GameScene extends Phaser.Scene {
             }
         }); //console.log(this);
 
-        this.physics.add.overlap(this.player, this.leafs, this.__proto__.collect, null, this);
+        this.physics.add.overlap(this.player, this.leaves, this.__proto__.collect, null, this);
         this.cursors = this.input.keyboard.createCursorKeys();
         this.pointer = this.input.activePointer;
     }
 
     update() {
-        if ((this.cursors.left.isDown) || ((this.pointer.isDown) && (this.pointer.x < 450))) {
+        if ((this.controllable) && ((this.cursors.left.isDown) || ((this.pointer.isDown) && (this.pointer.x < 450)))) {
             this.player.setVelocityX(-(GameConfig.config.speed.player));
-        } else if ((this.cursors.right.isDown) || ((this.pointer.isDown) && (this.pointer.x > 450))) {
+        } else if ((this.controllable) && ((this.cursors.right.isDown) || ((this.pointer.isDown) && (this.pointer.x > 450)))) {
             this.player.setVelocityX(GameConfig.config.speed.player);
         } else {
             this.player.setVelocityX(0);
         }
 
-        for (let i = 0; i < GameConfig.config.leafs; i++) {
-            if (this.leafs.children.entries[i].y >= 650) {
-                this.leafs.children.entries[i].body.allowGravity = false;
-                this.leafs.children.entries[i].setVelocityY(0);
-                this.leafs.children.entries[i].y = -50;
+        for (let i = 0; i < GameConfig.config.leaves; i++) {
+            if (this.leaves.children.entries[i].y >= 650) {
+                this.leaves.children.entries[i].body.allowGravity = false;
+                this.leaves.children.entries[i].setVelocityY(0);
+                this.leaves.children.entries[i].y = -50;
 
-                this.leafs.children.entries[i].isAvailable = true;
+                this.leaves.children.entries[i].isAvailable = true;
             }
 
-            if (this.dropLeafs) {
-                this.__proto__.center(this.labels[i], this.leafs.children.entries[i]);
+            if (this.dropLeaves) {
+                this.__proto__.center(this.labels[i], this.leaves.children.entries[i]);
             }
         }
 
@@ -142,7 +143,7 @@ class GameScene extends Phaser.Scene {
                 this.startCounter.setText("GO!");
                 this.__proto__.center(this.startCounter);
 
-                this.dropLeafs = setInterval(() => {
+                this.dropLeaves = setInterval(() => {
                     doDrop = true;
                 }, GameConfig.config.interval);
             } else {
@@ -154,8 +155,8 @@ class GameScene extends Phaser.Scene {
         if (doDrop) {
             doDrop = false;
 
-            let isPositive = this.getTones(GameConfig.config.vocabulary.positive.probability, GameConfig.config.vocabulary.negative.probability);
-            this.__proto__.drop(this.leafs.children.entries, this.labels, isPositive);
+            let isPositive = this.__proto__.chooseTones(GameConfig.config.vocabulary.positive.probability, GameConfig.config.vocabulary.negative.probability);
+            this.__proto__.drop(this.leaves.children.entries, this.labels, isPositive);
         }
     }
 
@@ -168,12 +169,12 @@ class GameScene extends Phaser.Scene {
         if ((type == "vertical") || (type == "both")) { target.y = baseY - target.height / 2; }
     }
 
-    getTones(positive, negative) {
+    chooseTones(positive, negative) {
         let random = Utilities.random(1, (positive + negative) + 1);
         if (random <= positive) { return true; } else { return false; }
     }
 
-    getWords(isPositive) {
+    chooseWord(isPositive) {
         if (isPositive) {
             let wordsCount = GameConfig.config.vocabulary.positive.list.length;
             return GameConfig.config.vocabulary.positive.list[Utilities.random(0, wordsCount)];
@@ -183,25 +184,28 @@ class GameScene extends Phaser.Scene {
         }
     }
 
-    drop(leafs, labels, isPositive, index = undefined) {
-        if ((index >= 0) && (index < GameConfig.config.leafs)) {
-            if (leafs[index].isAvailable) {
-                leafs[index].isAvailable = false;
+    //-------------------------------------------------------------------------
+    // Leaves Dropping
+    //-------------------------------------------------------------------------
+    drop(leaves, labels, isPositive, index = undefined) {
+        if ((index >= 0) && (index < GameConfig.config.leaves)) {
+            if (leaves[index].isAvailable) {
+                leaves[index].isAvailable = false;
 
-                leafs[index].isPositive = isPositive;
-                labels[index].setText(this.getWords(isPositive));
+                leaves[index].isPositive = isPositive;
+                labels[index].setText(this.chooseWord(isPositive));
 
-                leafs[index].body.allowGravity = true;
+                leaves[index].body.allowGravity = true;
             } else {
-                this.drop(leafs, labels, isPositive);
+                this.drop(leaves, labels, isPositive);
             }
         } else {
-            this.drop(leafs, labels, isPositive, Utilities.random(0, GameConfig.config.leafs));
+            this.drop(leaves, labels, isPositive, Utilities.random(0, GameConfig.config.leaves));
         }
     }
 
     //-------------------------------------------------------------------------
-    // Leafs Collection
+    // Leaves Collection
     //-------------------------------------------------------------------------
     collect(player, leaf) {
         leaf.body.allowGravity = false;
@@ -220,11 +224,14 @@ class GameScene extends Phaser.Scene {
         }
 
         if (this.score >= GameConfig.config.scores.wining) {
-            clearInterval(this.dropLeafs);
-            this.leafs.children.iterate((leafs) => {
-                leafs.body.allowGravity = false;
-                leafs.setVelocityY(0);
-                leafs.y = -50;
+            this.controllable = false;
+            this.player.setVelocityX(0);
+
+            clearInterval(this.dropLeaves);
+            this.leaves.children.iterate((leaves) => {
+                leaves.body.allowGravity = false;
+                leaves.setVelocityY(0);
+                leaves.y = -50;
             });
             
             this.congratulations = this.add.text(780, 0, "You won!", {
