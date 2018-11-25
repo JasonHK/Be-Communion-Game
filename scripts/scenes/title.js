@@ -22,7 +22,9 @@ class TitleScene extends Phaser.Scene {
         this.load.script('webfont', 'https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js');
     }
 
-    create() {
+    create() { console.log("loading title");
+        this.startGame = false;
+
         let backgroundJungleA00 = this.add.image(400, 300, "bg-jungle-00").setScale(3);
         let backgroundJungleA01 = this.add.image(400, 300, "bg-jungle-01").setScale(3);
         let backgroundJungleA02 = this.add.image(400, 300, "bg-jungle-02").setScale(3);
@@ -47,13 +49,6 @@ class TitleScene extends Phaser.Scene {
                     fill: "#000"
                 });
 
-                this.gameStart = this.add.text(0, 380, "Touch to start", {
-                    fontSize: "40px",
-                    fontFamily: "unifont",
-                    fill: "#000"
-                });
-                this.__proto__.center(this.gameStart, undefined, "horizontal");
-
                 this.gameTitle = this.add.text(0, 100, `${ GameConfig.name }`, {
                     fontSize: "100px",
                     fontFamily: "Righteous, Noto Sans TC",
@@ -62,15 +57,27 @@ class TitleScene extends Phaser.Scene {
                     strokeThickness: 5
                 });
                 this.__proto__.center(this.gameTitle, undefined, "horizontal");
+
+                setTimeout(() => {
+                    this.gameStart = this.add.text(0, 380, "Touch to start", {
+                        fontSize: "40px",
+                        fontFamily: "unifont",
+                        fill: "#000"
+                    });
+                    this.__proto__.center(this.gameStart, undefined, "horizontal");
+
+                    this.startGame = true;
+                }, 3000);
             }
         });
 
         this.keys = this.input.keyboard.addKey("SPACE");
-        this.pointer = this.input.activePointer;
+        this.pointer = this.input.activePointer; console.log(this);
     }
 
     update() {
-        if ((this.keys.isDown) || (this.pointer.isDown) || (this.input.activePointer.isDown)) { console.log(this.pointer);
+        if ((this.startGame) && ((this.keys.isDown) || (this.pointer.isDown) || (this.input.activePointer.isDown))) { 
+            this.startGame = false;
             this.scene.start("sc-game");
         }
     }

@@ -13,11 +13,6 @@ class GameScene extends Phaser.Scene {
                 }
             }
         });
-
-        this.controllable = true;
-        this.startCountdown = 4;
-        this.labels = [];
-        this.score = 0;
     }
 
     preload() {
@@ -34,7 +29,13 @@ class GameScene extends Phaser.Scene {
         this.load.script('webfont', 'https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js');
     }
 
-    create() {
+    create() { console.log("loading game");
+        this.controllable = true;
+        this.startCountdown = 4;
+        this.labels = [];
+        this.score = 0;
+        this.returnTitle = false;
+
         let backgroundJungleA00 = this.add.image(400, 300, "bg-jungle-00").setScale(3);
         let backgroundJungleA01 = this.add.image(400, 300, "bg-jungle-01").setScale(3);
         let backgroundJungleA02 = this.add.image(400, 300, "bg-jungle-02").setScale(3);
@@ -108,6 +109,7 @@ class GameScene extends Phaser.Scene {
         this.physics.add.overlap(this.player, this.leaves, this.__proto__.collect, null, this);
         this.cursors = this.input.keyboard.createCursorKeys();
         this.pointer = this.input.activePointer;
+        this.keys = this.input.keyboard.addKey("ESC"); console.log(this);
     }
 
     update() {
@@ -117,6 +119,11 @@ class GameScene extends Phaser.Scene {
             this.player.setVelocityX(GameConfig.config.speed.player);
         } else {
             this.player.setVelocityX(0);
+        }
+
+        if ((this.returnTitle) && ((this.keys.isDown) || (this.pointer.isDown))) {
+            this.returnTitle = false;
+            this.scene.start("sc-title");
         }
 
         for (let i = 0; i < GameConfig.config.leaves; i++) {
@@ -212,16 +219,8 @@ class GameScene extends Phaser.Scene {
         leaf.setVelocityY(0);
         leaf.y = -50;
 
-        if (leaf.isPositive) { 
-            this.score += GameConfig.config.vocabulary.positive.score; 
-        } else { 
-            this.score += ((this.score > GameConfig.config.scores.minimum) ? GameConfig.config.vocabulary.negative.score : 0); 
-        }
-        if (this.score < 10) { 
-            this.scoreCounter.setText("0" + this.score);
-        } else { 
-            this.scoreCounter.setText(this.score);
-        }
+        this.score = this.__proto__.calculateScore(this.score, leaf.isPositive);
+        this.scoreCounter.setText(this.score.toString().padStart(2, "0"));
 
         if (this.score >= GameConfig.config.scores.wining) {
             this.controllable = false;
@@ -234,16 +233,39 @@ class GameScene extends Phaser.Scene {
                 leaves.y = -50;
             });
             
-            this.congratulations = this.add.text(780, 0, "You won!", {
+            this.congratulations = this.add.text(0, 175, "You won!", {
                 fontSize: "100px",
                 fontFamily: "Righteous",
                 fill: "#000",
                 stroke: "#fff",
                 strokeThickness: 5
             });
-            this.__proto__.center(this.congratulations);
+            this.__proto__.center(this.congratulations, undefined, "horizontal");
+
+            setTimeout(() => {
+                this.gameStart = this.add.text(0, 380, "Touch to back to title", {
+                    fontSize: "40px",
+                    fontFamily: "unifont",
+                    fill: "#000"
+                });
+                this.__proto__.center(this.gameStart, undefined, "horizontal");
+
+                this.returnTitle = true;
+            }, 3000);
         }
 
         leaf.isAvailable = true;
+    }
+
+    calculateScore(currentScore, isPositive) {
+        const Vocabulary = GameConfig.config.vocabulary;
+        const MinScore = GameConfig.config.scores.minimum;
+
+        let newScore = currentScore + ((isPositive) ? Vocabulary.positive.score : Vocabulary.negative.score);
+        if (newScore < currentScore) {
+            return ((newScore < MinScore) ? MinScore : newScore);
+        } else {
+            return newScore;
+        }
     }
 }
