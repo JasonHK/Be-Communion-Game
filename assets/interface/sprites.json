@@ -4,7 +4,7 @@
 			"image": "sprites.png",
 			"format": "RGBA8888",
 			"size": {
-				"w": 606,
+				"w": 1062,
 				"h": 207
 			},
 			"scale": 1,
@@ -31,7 +31,7 @@
 					}
 				},
 				{
-					"filename": "buttons/start-hover.png",
+					"filename": "buttons/start-hovered.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -71,6 +71,69 @@
 						"w": 200,
 						"h": 205
 					}
+				},
+				{
+					"filename": "buttons/fullscreen-enter-active.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 150,
+						"h": 154
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 150,
+						"h": 154
+					},
+					"frame": {
+						"x": 607,
+						"y": 1,
+						"w": 150,
+						"h": 154
+					}
+				},
+				{
+					"filename": "buttons/fullscreen-enter-hovered.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 150,
+						"h": 154
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 150,
+						"h": 154
+					},
+					"frame": {
+						"x": 759,
+						"y": 1,
+						"w": 150,
+						"h": 154
+					}
+				},
+				{
+					"filename": "buttons/fullscreen-enter.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 150,
+						"h": 154
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 150,
+						"h": 154
+					},
+					"frame": {
+						"x": 911,
+						"y": 1,
+						"w": 150,
+						"h": 154
+					}
 				}
 			]
 		}
@@ -78,6 +141,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:f83d8290e1db9e9ca6b279b51855ab33:6833adef4159069cfca35a4d0121c869:1eabdf11f75e3a4fe3147baf7b5be24b$"
+		"smartupdate": "$TexturePacker:SmartUpdate:019715db9cdd4226ba0b73f6cafc9e33:f5903cf17105c513900830032c703e88:1eabdf11f75e3a4fe3147baf7b5be24b$"
 	}
 }
