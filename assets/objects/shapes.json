@@ -58,7 +58,7 @@
 		},
 		"fixtures": [
 			{
-				"label": "",
+				"label": "fruit_body",
 				"isSensor": false,
 				"vertices": [
 					[ { "x":118, "y":17 }, { "x":119, "y":11 }, { "x":117, "y":6 }, { "x":109, "y":0 }, { "x":102, "y":0 }, { "x":90, "y":9 }, { "x":110, "y":20 } ],
@@ -99,7 +99,7 @@
 		},
 		"fixtures": [
 			{
-				"label": "",
+				"label": "fruit_body",
 				"isSensor": false,
 				"vertices": [
 					[ { "x":25, "y":0 }, { "x":26, "y":15 }, { "x":34, "y":33 }, { "x":44, "y":43 }, { "x":86, "y":20 }, { "x":75, "y":9 }, { "x":65, "y":4 }, { "x":54, "y":1 } ],
@@ -142,7 +142,7 @@
 		},
 		"fixtures": [
 			{
-				"label": "",
+				"label": "fruit_body",
 				"isSensor": false,
 				"vertices": [
 					[ { "x":139, "y":154 }, { "x":139, "y":151 }, { "x":137, "y":155 } ],
@@ -184,7 +184,7 @@
 		},
 		"fixtures": [
 			{
-				"label": "",
+				"label": "fruit_body",
 				"isSensor": false,
 				"vertices": [
 					[ { "x":30, "y":27 }, { "x":32, "y":28 }, { "x":71, "y":7 }, { "x":30, "y":24 } ],
@@ -230,7 +230,7 @@
 		},
 		"fixtures": [
 			{
-				"label": "",
+				"label": "fruit_body",
 				"isSensor": false,
 				"vertices": [
 					[ { "x":39, "y":23 }, { "x":39, "y":25 }, { "x":41, "y":24 } ],
@@ -273,7 +273,7 @@
 		},
 		"fixtures": [
 			{
-				"label": "",
+				"label": "fruit_body",
 				"isSensor": false,
 				"vertices": [
 					[ { "x":124, "y":142 }, { "x":125, "y":140 }, { "x":140, "y":20 }, { "x":4, "y":53 }, { "x":121, "y":142 } ],
@@ -313,7 +313,7 @@
 		},
 		"fixtures": [
 			{
-				"label": "",
+				"label": "fruit_body",
 				"isSensor": false,
 				"vertices": [
 					[ { "x":117, "y":43 }, { "x":117, "y":36 }, { "x":110, "y":28 }, { "x":102, "y":27 }, { "x":89, "y":37 }, { "x":107, "y":48 } ],
@@ -360,10 +360,10 @@
 		},
 		"fixtures": [
 			{
-				"label": "",
+				"label": "fruits_sensor",
 				"isSensor": true,
 				"vertices": [
-					[ { "x":36, "y":65 }, { "x":50, "y":155 }, { "x":250, "y":155 }, { "x":264, "y":65 } ]
+					[ { "x":256, "y":115 }, { "x":44, "y":115 }, { "x":50, "y":155 }, { "x":250, "y":155 } ]
 				]
 			}
 		]

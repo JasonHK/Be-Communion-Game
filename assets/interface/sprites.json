@@ -4,11 +4,263 @@
 			"image": "sprites.png",
 			"format": "RGBA8888",
 			"size": {
-				"w": 1062,
-				"h": 207
+				"w": 200,
+				"h": 1845
 			},
 			"scale": 1,
 			"frames": [
+				{
+					"filename": "buttons/fullscreen-enter-active.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 100,
+						"h": 102
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 100,
+						"h": 102
+					},
+					"frame": {
+						"x": 0,
+						"y": 0,
+						"w": 100,
+						"h": 102
+					}
+				},
+				{
+					"filename": "buttons/fullscreen-enter-hovered.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 100,
+						"h": 102
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 100,
+						"h": 102
+					},
+					"frame": {
+						"x": 100,
+						"y": 0,
+						"w": 100,
+						"h": 102
+					}
+				},
+				{
+					"filename": "buttons/fullscreen-enter.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 100,
+						"h": 102
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 100,
+						"h": 102
+					},
+					"frame": {
+						"x": 0,
+						"y": 102,
+						"w": 100,
+						"h": 102
+					}
+				},
+				{
+					"filename": "buttons/fullscreen-exit-active.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 100,
+						"h": 102
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 100,
+						"h": 102
+					},
+					"frame": {
+						"x": 100,
+						"y": 102,
+						"w": 100,
+						"h": 102
+					}
+				},
+				{
+					"filename": "buttons/fullscreen-exit-hovered.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 100,
+						"h": 102
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 100,
+						"h": 102
+					},
+					"frame": {
+						"x": 0,
+						"y": 204,
+						"w": 100,
+						"h": 102
+					}
+				},
+				{
+					"filename": "buttons/fullscreen-exit.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 100,
+						"h": 102
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 100,
+						"h": 102
+					},
+					"frame": {
+						"x": 100,
+						"y": 204,
+						"w": 100,
+						"h": 102
+					}
+				},
+				{
+					"filename": "buttons/cursor-left-active.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 150,
+						"h": 154
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 150,
+						"h": 154
+					},
+					"frame": {
+						"x": 0,
+						"y": 306,
+						"w": 150,
+						"h": 154
+					}
+				},
+				{
+					"filename": "buttons/cursor-left-hovered.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 150,
+						"h": 154
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 150,
+						"h": 154
+					},
+					"frame": {
+						"x": 0,
+						"y": 460,
+						"w": 150,
+						"h": 154
+					}
+				},
+				{
+					"filename": "buttons/cursor-left.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 150,
+						"h": 154
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 150,
+						"h": 154
+					},
+					"frame": {
+						"x": 0,
+						"y": 614,
+						"w": 150,
+						"h": 154
+					}
+				},
+				{
+					"filename": "buttons/cursor-right-active.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 150,
+						"h": 154
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 150,
+						"h": 154
+					},
+					"frame": {
+						"x": 0,
+						"y": 768,
+						"w": 150,
+						"h": 154
+					}
+				},
+				{
+					"filename": "buttons/cursor-right-hovered.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 150,
+						"h": 154
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 150,
+						"h": 154
+					},
+					"frame": {
+						"x": 0,
+						"y": 922,
+						"w": 150,
+						"h": 154
+					}
+				},
+				{
+					"filename": "buttons/cursor-right.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 150,
+						"h": 154
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 150,
+						"h": 154
+					},
+					"frame": {
+						"x": 0,
+						"y": 1076,
+						"w": 150,
+						"h": 154
+					}
+				},
 				{
 					"filename": "buttons/start-active.png",
 					"rotated": false,
@@ -24,8 +276,8 @@
 						"h": 205
 					},
 					"frame": {
-						"x": 1,
-						"y": 1,
+						"x": 0,
+						"y": 1230,
 						"w": 200,
 						"h": 205
 					}
@@ -45,8 +297,8 @@
 						"h": 205
 					},
 					"frame": {
-						"x": 203,
-						"y": 1,
+						"x": 0,
+						"y": 1435,
 						"w": 200,
 						"h": 205
 					}
@@ -66,73 +318,10 @@
 						"h": 205
 					},
 					"frame": {
-						"x": 405,
-						"y": 1,
+						"x": 0,
+						"y": 1640,
 						"w": 200,
 						"h": 205
-					}
-				},
-				{
-					"filename": "buttons/fullscreen-enter-active.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 150,
-						"h": 154
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 150,
-						"h": 154
-					},
-					"frame": {
-						"x": 607,
-						"y": 1,
-						"w": 150,
-						"h": 154
-					}
-				},
-				{
-					"filename": "buttons/fullscreen-enter-hovered.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 150,
-						"h": 154
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 150,
-						"h": 154
-					},
-					"frame": {
-						"x": 759,
-						"y": 1,
-						"w": 150,
-						"h": 154
-					}
-				},
-				{
-					"filename": "buttons/fullscreen-enter.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 150,
-						"h": 154
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 150,
-						"h": 154
-					},
-					"frame": {
-						"x": 911,
-						"y": 1,
-						"w": 150,
-						"h": 154
 					}
 				}
 			]
@@ -141,6 +330,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:019715db9cdd4226ba0b73f6cafc9e33:f5903cf17105c513900830032c703e88:1eabdf11f75e3a4fe3147baf7b5be24b$"
+		"smartupdate": "$TexturePacker:SmartUpdate:bc2bedb19b349c1d96b352b55527d348:cd80d886f1b3dc9dae5df04e53a52512:1eabdf11f75e3a4fe3147baf7b5be24b$"
 	}
 }
