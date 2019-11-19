@@ -16,6 +16,9 @@
                 "node_modules/*",
                 "src/types/*"
             ],
+            "phaser": [
+                "src/types/phaser"
+            ],
         },
         "allowJs": true,
         "allowSyntheticDefaultImports": true,
