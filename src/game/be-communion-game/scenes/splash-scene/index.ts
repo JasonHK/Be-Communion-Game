@@ -17,6 +17,8 @@ import { SPLASH_SCENE_NAMESPACE } from "./constants";
 import "phaser-plugin-webfont-loader/lib/phaser";
 
 export class SplashScene extends Phaser.Scene
+    implements
+        Phaser.Scene.Preload, Phaser.Scene.Create
 {
     private _indicator: ProgressIndicator;
 
@@ -25,7 +27,9 @@ export class SplashScene extends Phaser.Scene
         super({ key: SplashScene.NAMESPACE });
     }
 
-    public init(): void {}
+    //==================================================================================================
+    // Implements: Phaser.Scene.Preload
+    //==================================================================================================
 
     public preload(): void
     {
@@ -39,17 +43,20 @@ export class SplashScene extends Phaser.Scene
         });
     }
 
+    //==================================================================================================
+    // Implements: Phaser.Scene.Create
+    //==================================================================================================
+
     public create(): void
     {
         this._indicator = new ProgressIndicator(this, 0, 0)
             .setOrigin(0.5)
-            .setX(this.sys.canvas.width / 2)
-            .setY(this.sys.canvas.height / 2);
+            .setPosition(this.sys.canvas.width / 2, this.sys.canvas.height / 2);
 
-        this.load.once("complete", this._onLoadComplete.bind(this));
-        this.load.once("start", this._onLoadStart.bind(this));
-
-        this.load.on("progress", this._onLoadProgress.bind(this));
+        this.load
+            .on("progress", this._onLoadProgress, this)
+            .once("complete", this._onLoadComplete, this)
+            .once("start", this._onLoadStart, this);
 
         this.load.webfont("Webfonts", {
             google: {
@@ -64,15 +71,15 @@ export class SplashScene extends Phaser.Scene
             .multiatlas(Assets.Backgrounds.NAMESPACE, Assets.Backgrounds.SPRITES, Assets.Backgrounds.DIRECTORY)
             .multiatlas(Assets.Interface.NAMESPACE, Assets.Interface.SPRITES, Assets.Interface.DIRECTORY)
             .multiatlas(Assets.Objects.NAMESPACE, Assets.Objects.SPRITES, Assets.Objects.DIRECTORY);
-
-        this.load.image("Objects.Minecart", "assets/objects/minecart.png");
-        this.load.image("Objects.Fruits.Apple", "assets/objects/fruits/apple.png");
+            
         this.load.json("Shapes.Objects", "assets/objects/shapes.json");
 
         this.load.start();
     }
 
-    public update(): void {}
+    //==================================================================================================
+    // Methods: Private Methods
+    //==================================================================================================
 
     private _loadTitleScene(): void
     {
@@ -80,15 +87,19 @@ export class SplashScene extends Phaser.Scene
         this.scene.stop();
     }
 
+    //==================================================================================================
+    // Methods: Event Listeners
+    //==================================================================================================
+
     private _onLoadComplete(): void
     {
         this._indicator.setProgress(100);
-        setTimeout((): void => { this._loadTitleScene(); }, 1000);
+        setTimeout(this._loadTitleScene.bind(this), 1000);
     }
 
     private _onLoadProgress(progress: number): void
     {
-        this._indicator.setProgress(progress);
+        this._indicator.setProgress(Math.floor(progress * 100));
     }
 
     private _onLoadStart(): void

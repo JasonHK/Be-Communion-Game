@@ -32,14 +32,16 @@ export class BeCommunionGame
                 autoCenter: Phaser.Scale.CENTER_BOTH,
             },
             backgroundColor: "#000000",
+            disableContextMenu: true,
             physics: {
                 default: "matter",
                 matter: {
-                    debug: true,
                     gravity: {
                         x: 0,
                         y: 0.65,
                     },
+                    debug: true,
+                    debugShowVelocity: true,
                 },
             },
             plugins: {

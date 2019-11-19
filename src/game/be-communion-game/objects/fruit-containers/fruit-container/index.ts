@@ -1,5 +1,6 @@
 "use strict";
 
+import isNullLike from "@jasonhk/is-null-like";
 import Phaser from "phaser";
 
 import { ObjectAssets } from "../../../assets/object-assets";
@@ -15,11 +16,12 @@ export class FruitContainer extends Phaser.GameObjects.Container
     {
         super(scene, x, y);
 
+        label = isNullLike(label) ? "" : label;
+
         this._fruit = scene.add.image(undefined, undefined, ObjectAssets.NAMESPACE, fruit);
-            //.setOrigin(0.5, 0.58);
         this.addAt(this._fruit, 0);
 
-        this._label = scene.add.text(undefined, undefined, label || "", Object.assign({}, LABEL_STYLE, style))
+        this._label = scene.add.text(undefined, undefined, label, Object.assign({}, LABEL_STYLE, style))
             .setOrigin(0.5);
         this.addAt(this._label, 1);
 

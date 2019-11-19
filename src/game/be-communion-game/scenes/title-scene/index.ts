@@ -4,6 +4,7 @@ import Phaser from "phaser";
 
 import { InterfaceAssets } from "../../assets/interface-assets";
 
+import { ImageButton } from "../../objects/interactive-objects/image-button";
 import {
     BackgroundLayer,
     ForegroundLayer,
@@ -22,9 +23,12 @@ import {
     PARALLAX_LIMIT,
     PARALLAX_STEP,
     TITLE_SCENE_NAMESPACE,
+    TITLE_SCENE_BUTTONS,
 } from "./constants";
 
 export class TitleScene extends Phaser.Scene
+    implements
+        Phaser.Scene.Init, Phaser.Scene.Preload, Phaser.Scene.Create
 {
     private _credit: GameCredit;
     private _creditConfig: GameCredit.Config;
@@ -34,16 +38,27 @@ export class TitleScene extends Phaser.Scene
     private _parallaxEnabled: boolean = true;
     private _parallaxOffset: number = 0;
 
-    private _isPointerDown: boolean = false;
-    private _isPointerOver: boolean = false;
-    private _startButton: Phaser.GameObjects.Image;
+    private _fullscreenButton: ImageButton;
+    private _startButton: ImageButton;
+
+    //==================================================================================================
+    // Constructor: Public Constructor
+    //==================================================================================================
 
     constructor()
     {
         super({ key: TitleScene.NAMESPACE });
     }
 
+    //==================================================================================================
+    // Implements: Phaser.Scene.Init
+    //==================================================================================================
+
     public init(): void {}
+
+    //==================================================================================================
+    // Implements: Phaser.Scene.Preload
+    //==================================================================================================
 
     public preload(): void
     {
@@ -56,12 +71,18 @@ export class TitleScene extends Phaser.Scene
         };
     }
 
+    //==================================================================================================
+    // Implements: Phaser.Scene.Create
+    //==================================================================================================
+
     public create(): void
     {
         this._backgroundLayer = new BackgroundLayer(this, 0, 0)
             .setDepth(1);
         this._foregroundLayer = new ForegroundLayer(this, 0, 0)
             .setDepth(4);
+
+        console.log(this._foregroundLayer.body);
 
         this.add.image(0, 0, "Objects.Minecart")
             .setOrigin(0.5, 1)
@@ -74,29 +95,23 @@ export class TitleScene extends Phaser.Scene
             .setY(this.sys.canvas.height)
             .setDepth(5);
 
-        this._startButton = this.add.image(0, 0, InterfaceAssets.NAMESPACE, InterfaceAssets.Buttons.Start)
-            .setOrigin(0.5)
-            .setX(this.sys.canvas.width / 2)
-            .setY(650)
-            .setDepth(5)
-            .setInteractive({ useHandCursor: true });
+        this._startButton = new ImageButton(this, undefined, undefined, TITLE_SCENE_BUTTONS.START)
+            .setPosition(this.sys.canvas.width / 2, 650)
+            .setDepth(5);
 
-        this.input
-            .on("pointerdown", () => { this._isPointerDown = true; })
-            .on("pointerdownoutside", () => { this._isPointerDown = true; })
-            .on("pointerup", () => { this._isPointerDown = false; })
-            .on("pointerupoutside", () => { this._isPointerDown = false; })
+        this._fullscreenButton = new ImageButton(this, undefined, undefined, TITLE_SCENE_BUTTONS.FULLSCREEN_ENTER)
+            .setPosition(this.sys.canvas.width - 75, 75)
+            .setDepth(5);
+            
+        this._fullscreenButton.on("buttonup", this._onImageButtonUp, this);
+        this._startButton.on("buttonup", this._onImageButtonUp, this);
 
-        this._startButton
-            .on("pointerover", () => {
-                const frame: string = this._isPointerDown ? InterfaceAssets.Buttons.StartActive
-                                                          : InterfaceAssets.Buttons.StartHover;
-                this._startButton.setFrame(frame);
-            })
-            .on("pointerout", () => { this._startButton.setFrame(InterfaceAssets.Buttons.Start); })
-            .on("pointerdown", () => { this._startButton.setFrame(InterfaceAssets.Buttons.StartActive); })
-            .on("pointerup", this._startNewGame.bind(this));
+        console.log(this._credit);
     }
+
+    //==================================================================================================
+    // Overrides: Phaser.Scene#update
+    //==================================================================================================
 
     public update(): void
     {
@@ -108,21 +123,45 @@ export class TitleScene extends Phaser.Scene
         }
     }
 
-    private _onPointerOver(): void
-    {}
+    //==================================================================================================
+    // Methods: Private Methods
+    //==================================================================================================
 
-    private _startNewGame(): void
+    private _loadGameScene(): void
     {
-        this._parallaxEnabled = false;
-        setTimeout((): void => {
-            const states: SceneStates = {
-                parallax: {
-                    offset: this._parallaxOffset,
-                },
-            };
+        const states: SceneStates = {
+            parallax: {
+                offset: this._parallaxOffset,
+            },
+        };
 
-            this.scene.start(GameScene.NAMESPACE, states);
-        }, 100);
+        this.scene.start(GameScene.NAMESPACE, states);
+    }
+
+    //==================================================================================================
+    // Methods: Event Listeners
+    //==================================================================================================
+
+    private _onImageButtonUp(button: ImageButton): void
+    {
+        if (button === this._fullscreenButton)
+        {
+            if (this.scale.isFullscreen)
+            {
+                this._fullscreenButton.setButtonStyles(TITLE_SCENE_BUTTONS.FULLSCREEN_ENTER);
+                this.scale.stopFullscreen();
+            }
+            else
+            {
+                this._fullscreenButton.setButtonStyles(TITLE_SCENE_BUTTONS.FULLSCREEN_EXIT);
+                this.scale.startFullscreen();
+            }
+        }
+        else if (button === this._startButton)
+        {
+            this._parallaxEnabled = false;
+            setTimeout(this._loadGameScene.bind(this), 100);
+        }
     }
 }
 

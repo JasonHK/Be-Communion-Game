@@ -6,9 +6,11 @@ import Phaser from "phaser";
 
 import { ObjectAssets } from "../../assets/object-assets";
 
-import { ControllableMinecart } from "../../objects/controllable-minecart";
+import { ImageButton } from "../../objects/interactive-objects/image-button";
+import { MinecartPlayer } from "../../objects/minecart-player";
 import { FruitContainer } from "../../objects/fruit-containers/fruit-container";
-import { Matterify } from "../../objects/matterify";
+import { AppleRedContainer } from "../../objects/fruit-containers/apple-red-container";
+import { MatterifyObject } from "../../objects/matterify-object";
 import {
     BackgroundLayer,
     ForegroundLayer,
@@ -20,26 +22,34 @@ import { SceneStates } from "../scene-states";
 
 import { SCENES_NAMESPACE } from "../constants";
 import {
+    GAME_SCENE_BUTTONS,
     GAME_SCENE_NAMESPACE,
 } from "./constants";
 
 export class GameScene extends Phaser.Scene
+    implements
+        Phaser.Scene.Init<SceneStates>, Phaser.Scene.Create
 {
     private _background: BackgroundLayer;
     private _foreground: ForegroundLayer;
     private _parallaxOffset: number = 0;
 
-    private _fruits: Array<Matterify<FruitContainer>>;
-    private _minecart: ControllableMinecart;
+    private _fruits: Array<MatterifyObject<FruitContainer>>;
+    private _minecart: MinecartPlayer;
     private _player: Phaser.Physics.Matter.Image;
 
     private _controllable: boolean = false;
-    private _keys: GameScene.Keys;
+    private _cursorButtons: GameScene.CursorButtons;
+    private _cursorKeys: GameScene.CursorKeys;
 
     constructor()
     {
         super({ key: GameScene.NAMESPACE });
     }
+
+    //==================================================================================================
+    // Implements: Phaser.Scene.Init
+    //==================================================================================================
 
     public init(states?: SceneStates): void
     {
@@ -49,7 +59,9 @@ export class GameScene extends Phaser.Scene
         }
     }
 
-    public preload(): void {}
+    //==================================================================================================
+    // Implements: Phaser.Scene.Create
+    //==================================================================================================
 
     public create(): void
     {
@@ -63,78 +75,74 @@ export class GameScene extends Phaser.Scene
         this._foreground = new ForegroundLayer(this, 0, 0)
             .setDepth(4);
 
-        this._minecart = new ControllableMinecart(this);
-
-        //this._minecart = this.matter.add.image(0, 0, ObjectAssets.NAMESPACE, ObjectAssets.Minecart, { shape: shapes.minecart })
-        //    //.setOrigin(0.5, 0.4)
-        //    .setX(500)
-        //    .setY(835)
-        //    .setDepth(3);
-        //this._minecart.setIgnoreGravity(true);
-
-        //console.log(ObjectAssets.Fruits);
-        //const apple = this.matter.add.image(0, 0, ObjectAssets.NAMESPACE, ObjectAssets.Fruits.AppleRed, { shape: shapes.fruits_apple_red })
-        //    .setX(500)
-        //    .setY(100)
-        //    .setDepth(2);
-        //(apple.body as MatterJS.Body).collisionFilter = {
-        //    category: 0b100,
-        //    group: 0b000,
-        //    mask: 0b110,
-        //};
+        this._minecart = new MinecartPlayer(this);
+        this._minecart.on("fruitcollected", this._onFruitCollected, this);
         
-        const apple = (this.matter.add.gameObject(new FruitContainer(this, ObjectAssets.Fruits.AppleRed, 100, 0, "Test"), { shape: shapes.fruits_apple_red }) as Matterify<FruitContainer>)
-            .setX(500)
-            .setY(100)
+        const apple = this.matter.add.gameObject(new AppleRedContainer(this, 100, 0), { shape: shapes.fruits_apple_red })
+            .setPosition(500, 100)
             .setDepth(2);
-
-        //this._player = this.matter.add.image(0, 0, ObjectAssets.NAMESPACE, ObjectAssets.Minecart, { shape: shapes.player })
-        //    .setX(500)
-        //    .setY(835)
-        //    .setDepth(3);
-        //this._player.setIgnoreGravity(true);
-        //(this.matter.body as typeof MatterJS.Body).setInertia(this._player.body as MatterJS.Body, Infinity);
 
         this._background.tilesPositionX = this._parallaxOffset;
         this._foreground.tilesPositionX = this._parallaxOffset;
 
-        this._keys = this.input.keyboard.addKeys({
+        const cursorButtonsLeft: ImageButton = new ImageButton(this, undefined, undefined, GAME_SCENE_BUTTONS.CURSOR_LEFT)
+            .setPosition(100, this.sys.canvas.height - 100)
+            .setDepth(5);
+        const cursorButtonsRight: ImageButton = new ImageButton(this, undefined, undefined, GAME_SCENE_BUTTONS.CURSOR_RIGHT)
+            .setPosition(this.sys.canvas.width - 100, this.sys.canvas.height - 100)
+            .setDepth(5);
+
+        this._cursorButtons = {
+            left: cursorButtonsLeft,
+            right: cursorButtonsRight,
+        };
+
+        this.input.addPointer(3);
+
+        this._cursorKeys = this.input.keyboard.addKeys({
             left: Phaser.Input.Keyboard.KeyCodes.LEFT,
             right: Phaser.Input.Keyboard.KeyCodes.RIGHT,
-        } as GameScene.KeyCodes) as GameScene.Keys;
+        });
 
         this._controllable = true;
     }
 
+    //==================================================================================================
+    // Overrides: Phaser.Scene#update
+    //==================================================================================================
+
     public update(): void
     {
-        //this._player.setY(835);
-        //this._minecart.setY(835);
-        ////this._minecart.setX(this._player.x);
-        //if (this._controllable)
-        //{
-        //    let velocity: number = 0;
-        //    if (this._keys.left.isDown) { velocity += -10; }
-        //    if (this._keys.right.isDown) { velocity += 10; }
-        //    this._player.setVelocityX(velocity);
-        //    this._minecart.setX(this._player.x);
-        //}
         if (this._controllable)
         {
             let velocity: number = 0;
-            if (this._keys.left.isDown) { velocity += -10; }
-            if (this._keys.right.isDown) { velocity += 10; }
+            if (this._cursorKeys.left.isDown || this._cursorButtons.left.isDown) { velocity += -10; }
+            if (this._cursorKeys.right.isDown || this._cursorButtons.right.isDown) { velocity += 10; }
             this._minecart.setVelocityX(velocity);
         }
     }
 
+    //==================================================================================================
+    // Methods: Private Methods
+    //==================================================================================================
+
     private _createNewFruit(): void {}
+
+    //==================================================================================================
+    // Methods: Event Listeners
+    //==================================================================================================
+
+    private _onFruitCollected(fruit: Phaser.Types.Physics.Matter.MatterGameObject<FruitContainer>): void
+    {
+        //fruit.destroy(true);
+    }
 }
 
 export namespace GameScene
 {
     export const NAMESPACE: string = joinPhaserNamespaces(SCENES_NAMESPACE, GAME_SCENE_NAMESPACE);
 
-    export type KeyCodes = Record<"left" | "right", number>;
-    export type Keys = Record<"left" | "right", Phaser.Input.Keyboard.Key>;
+    export type CursorButtons = Record<"left" | "right", ImageButton>;
+    export type CursorKeyCodes = Record<"left" | "right", number>;
+    export type CursorKeys = Phaser.Types.Input.Keyboard.KeysRecord<"left" | "right">;
 }
